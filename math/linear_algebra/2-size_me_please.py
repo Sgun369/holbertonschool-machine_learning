@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 """Size Me Please"""
-import numpy as np
+
 
 def matrix_shape(matrix):
     """calculates the shape of a matrix"""
-    return list(np.shape(matrix))
+    shape = []
+    while isinstance (matrix, list):
+        shape.append(len(matrix))
+        matrix = matrix[0] if matrix else None
+    return shape
