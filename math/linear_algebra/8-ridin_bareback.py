@@ -7,7 +7,7 @@ def mat_mul(mat1, mat2):
     # check if matrices can be mltiplied
     if len(mat1[0]) != len(mat2):
         return None
-    
+
     # initialize result matrix with appropriate dimensions
     result = [[0] * len(mat2[0]) for _ in range(len(mat1))]
 
