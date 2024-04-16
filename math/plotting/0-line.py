@@ -8,5 +8,5 @@ def line():
     y = np.arange(0, 11) ** 3
     plt.figure(figsize=(6.4, 4.8))
     plt.plot(y, color='red')
-    plt.xlim = 10
+    plt.xlim = (0, 10)
     plt.show()
