@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
+"""Scatter """
 import numpy as np
 import matplotlib.pyplot as plt
 
 
 def scatter():
-
+    """scatter plot"""
     mean = [69, 0]
     cov = [[15, 8], [8, 15]]
     np.random.seed(5)
