@@ -5,7 +5,7 @@ determined by our priorities"""
 
 
 def summation_i_squared(n):
-    """ that calculates \sum_{i=1}^{n} i^2"""
+    """ that calculates """
     if not isinstance(n, (int, float)) or n < 1:
         return None
 
