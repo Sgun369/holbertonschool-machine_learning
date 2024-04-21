@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""code to plot a histogram of student scores for a project"""
+"""Frequency"""
 import numpy as np
 import matplotlib.pyplot as plt
 
 
 def frequency():
-    """ x-axis has bins every 10 units"""
+    """plot a histogram of student scores for a project"""
     np.random.seed(5)
     student_grades = np.random.normal(68, 15, 50)
     plt.figure(figsize=(6.4, 4.8))
