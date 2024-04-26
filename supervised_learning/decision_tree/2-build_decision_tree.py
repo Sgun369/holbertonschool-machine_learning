@@ -5,7 +5,6 @@ import numpy as np
 
 class Node:
     """Node class"""
-
     def __init__(self, feature=None, threshold=None, left_child=None,
                  right_child=None,
                  is_root=False, depth=0):
@@ -42,37 +41,33 @@ class Node:
         if self.right_child:
             count += self.right_child.count_nodes_below(only_leaves)
         return count
-
+    
     def __str__(self):
-        """String representation of the node"""
-        node_repr = f"[feature={self.feature}, threshold={self.threshold}] depth={self.depth}\n"
+        node_label = f"node [feature={self.feature}, threshold={self.threshold}]" if not self.is_root else f"root [feature={self.feature}, threshold={self.threshold}]"
+        parts = [node_label]
         if self.left_child:
-            node_repr += self.left_child_add_prefix(self.left_child.__str__())
+            parts.append(self.left_child_add_prefix(str(self.left_child)))
         if self.right_child:
-            node_repr += self.right_child_add_prefix(self.right_child.__str__())
-        return node_repr
-                
-
+            parts.append(self.right_child_add_prefix(str(self.right_child)))
+        return "\n".join(parts)
+    
     def left_child_add_prefix(self, text):
-        """Prefixes the text with the left child prefix"""
         lines = text.split("\n")
         new_text = "    +--" + lines[0] + "\n"
         for x in lines[1:]:
             new_text += ("    |  " + x) + "\n"
-        return (new_text)
-    
+        return new_text.rstrip()
+
     def right_child_add_prefix(self, text):
-        """Prefixes the text with the right child prefix"""
         lines = text.split("\n")
-        new_text = "    \\--" + lines[0] + "\n"
+        new_text = "    +--" + lines[0] + "\n"
         for x in lines[1:]:
-                new_text += ("    |  " + x) + "\n"
-        return new_text
+            new_text += ("     " + x) + "\n"
+        return new_text.rstrip()
 
 
 class Leaf(Node):
     """Leaf class"""
-
     def __init__(self, value, depth=None):
         super().__init__()
         self.value = value
@@ -82,15 +77,13 @@ class Leaf(Node):
     def max_depth_below(self):
         """Returns the depth of the leaf"""
         return self.depth
-
+    
     def __str__(self):
-        """String representation of the leaf"""
-        return (f"-> leaf [value={self.value}] ")
+        return f"-> leaf [value={self.value}] "
 
 
 class Decision_Tree():
     """Decision Tree class"""
-
     def __init__(
             self,
             max_depth=10,
@@ -98,7 +91,7 @@ class Decision_Tree():
             seed=0,
             split_criterion="random",
             root=None
-    ):
+            ):
         self.rng = np.random.default_rng(seed)
         if root:
             self.root = root
@@ -118,7 +111,8 @@ class Decision_Tree():
     def count_nodes(self, only_leaves=False):
         """Counts all nodes or only leaves in tree"""
         return self.root.count_nodes_below(only_leaves=only_leaves)
-
+    
     def __str__(self):
-        """String representation of the tree"""
-        return self.root.__str__()
+        return str(self.root)
+    
+    
