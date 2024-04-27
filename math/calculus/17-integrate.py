@@ -9,14 +9,16 @@ def poly_integral(poly, C=0):
 
     integral = [C]
 
-    for i in range(len(poly)):
-        if poly[i] != 0:
-            new_coeff = poly[i] / (i + 1)
-            if new_coeff.is_integer():
-                new_coeff = int(new_coeff)
-            integral.append(new_coeff)
+    for i, coef in enumerate(poly):
+        if coef != 0:
+            new_coef = coef / (i + 1)
+            if new_coef.is_integer():
+                new_coef = int(new_coef)
+            integral.append(new_coef)
         else:
             integral.append(0)
+
     while len(integral) > 1 and integral[-1] == 0:
         integral.pop()
+
     return integral
