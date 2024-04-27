@@ -54,7 +54,7 @@ class Node:
         the Node and its children.
         """
         result = (
-            f"root [feature={self.feature},threshold={self.threshold}]"
+            f"root [feature={self.feature}, threshold={self.threshold}]"
             if self.is_root
             else f"-> node [feature={self.feature}, threshold={self.threshold}]"
         )
