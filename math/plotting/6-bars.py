@@ -9,33 +9,21 @@ def bars():
     fruit = np.random.randint(0, 20, (4, 3))
     plt.figure(figsize=(6.4, 4.8))
 
-    # Assign colors to each fruit based on the specification
-    colors = ['red', 'yellow', '#ff8000', '#ffe5b4']
-    fruit_labels = ['Apples', 'Bananas', 'Oranges', 'Peaches']
-    person_labels = ['Farrah', 'Fred', 'Felicia']
+    rows = ('apples', 'bananas', 'oranges', 'peaches')
+    columns = ('Farrah', 'Fred', 'Felicia')
+    index = columns
+    colors = ('red', 'yellow', '#ff8000', '#ffe5b4')
+    n_rows = len(fruit)
+    bar_width = 0.5
+    y_offset = np.zeros(len(columns))
 
-    # Set up the bar positions (x-coordinates for each group of bars)
-    x = np.arange(len(person_labels))
+    for row in range(n_rows):
+        plt.bar(index, fruit[row], bar_width, bottom=y_offset,
+                color=colors[row], label=rows[row])
+        y_offset = y_offset + fruit[row]
 
-    # Plot bars
-    # Start bottom at zero for the first row of fruit
-    bottom = np.zeros(len(person_labels))
-    for idx, (fruit_row, color) in enumerate(zip(fruit, colors)):
-        plt.bar(
-            x,
-            fruit_row,
-            color=color,
-            label=fruit_labels[idx],
-            bottom=bottom,
-            width=0.5)
-        bottom += fruit_row  # Update bottom position for the next stack
-
-    # Add labels, title, and legend
+    plt.title("Number of Fruit per Person")
+    plt.legend()
+    plt.yticks(np.arange(0, 90, 10))
     plt.ylabel('Quantity of Fruit')
-    plt.title('Number of Fruit per Person')
-    plt.xticks(x, person_labels)
-    plt.yticks(np.arange(0, 81, 10))
-    plt.legend(title="Fruit Type")
-
-    # Show the plot
     plt.show()
