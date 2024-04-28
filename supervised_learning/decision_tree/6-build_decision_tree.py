@@ -227,6 +227,10 @@ class Decision_Tree:
             np.array([leaf.indicator(A) * leaf.value for leaf in leaves]),
             axis=0)
 
+    def pred(self, x):
+        """predict the value of x"""
+        return self.root.pred(x)
+
     def __str__(self):
         """String representation of the entire Decision Tree."""
         return str(self.root)
