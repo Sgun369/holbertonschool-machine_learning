@@ -25,6 +25,7 @@ class Neuron:
     @property
     def b(self):
         """Get the bias for the neuron"""
+        return self.__b
 
     @property
     def A(self):
