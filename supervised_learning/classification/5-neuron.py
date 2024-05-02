@@ -54,14 +54,12 @@ class Neuron:
         predictions = (A >= 0.5).astype(int)
         return predictions, cost
 
-
     def gradient_descent(self, X, Y, A, alpha=0.05):
         """Calculate on pass of gradient descent on the neuron"""
         m = Y.shape[1]
         dz = A - Y
-        dw = np.dot(X, dz.T) /m
+        dw = np.dot(X, dz.T) / m
         db = np.sum(dz) / m
-        
+
         self.__W -= alpha * dw.T
-        self.__b -= alpha *db
-    
+        self.__b -= alpha * db
