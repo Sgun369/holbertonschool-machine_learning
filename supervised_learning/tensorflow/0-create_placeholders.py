@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Placeholders"""
-import tensorflow.compact.v1 as tf  # type: ignore
+import tensorflow.compact.v1 as tf
 
 
 def create_placeholders(nx, classes):
