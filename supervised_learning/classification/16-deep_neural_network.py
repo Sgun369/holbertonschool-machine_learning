@@ -22,13 +22,14 @@ class DeepNeuralNetwork:
         self.cache = {}  # intermediary values of the network
         self.weights = {}  # weights and biases of the network
         # loop through each layer to initialize weights and biases
-        for i in range(1, self.L + 1):
-            weight_key = f"W{i}"
-            bias_key = f"b{i}"
-            layer_size = layers[i - 1]
-            prev_layer_size = nx if i == 1 else layers[i - 2]
-
-        # He and al initialization method for weights
-        self.weights[weight_key] = np.random.randn(
-            layer_size, prev_layer_size) * np.sqrt(2 / prev_layer_size)
-        self.weights[bias_key] = np.zeros((layer_size, 1))
+        for i in range(len(layers)):
+            if (not isinstance(layers[i], int)) or layers[i] <= 0:
+                raise TypeError("layers must be a list of positive integers")
+            if i == 0:
+                He = np.random.randn(layers[i], nx) * np.sqrt(2 / nx)
+                self.weights["W" + str(i + 1)] = He
+            else:
+                He = np.random.randn(
+                    layers[i], layers[i - 1]) * np.sqrt(2 / layers[i - 1])
+                self.weights['W' + str(i + 1)] = He
+            self.weights['b' + str(i + 1)] = np.zeros((layers[i], 1))
