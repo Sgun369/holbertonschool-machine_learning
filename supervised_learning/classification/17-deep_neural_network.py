@@ -16,28 +16,31 @@ class DeepNeuralNetwork:
             raise TypeError("layers must be a list of positive integers")
 
         self.__L = len(layers)
-        self.__cache = {}
-        self.__weights = {}
-
+        self.__cache = dict()
+        self.__weights = dict()
         for i in range(len(layers)):
-            if not isinstance(layers[i], int) or layers[i] <= 0:
+            if (not isinstance(layers[i], int)) or layers[i] <= 0:
                 raise TypeError("layers must be a list of positive integers")
-            layer_input_size = nx if i == 0 else layers[i - 1]
-            self.__weights['W' + str(i + 1)] = np.random.randn(layers[i],
-                                                               layer_input_size) * np.sqrt(2 / layer_input_size)
+            if i == 0:
+                He = np.random.randn(layers[i], nx) * np.sqrt(2 / nx)
+                self.__weights["W" + str(i + 1)] = He
+            else:
+                He = np.random.randn(
+                    layers[i], layers[i - 1]) * np.sqrt(2 / layers[i - 1])
+                self.__weights['W' + str(i + 1)] = He
             self.__weights['b' + str(i + 1)] = np.zeros((layers[i], 1))
 
     @property
     def L(self):
-        """ Getter for number of layers. """
+        """ Return layers in the deep neural network """
         return self.__L
 
     @property
     def cache(self):
-        """ Getter for cache. """
+        """ Return the values stored in cache """
         return self.__cache
 
     @property
     def weights(self):
-        """ Getter for weights. """
+        """ Return the values stored in the weights dictionary """
         return self.__weights
