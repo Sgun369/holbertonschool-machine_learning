@@ -15,19 +15,18 @@ def train_model(
         verbose=True,
         shuffle=False):
     """ train the model using early stopping"""
-    callbacks = []
-    if early_stopping and validation_data is not None:
-        early_stopping_callback = K.callbacks.EarlyStopping(
-            monitor='val_loss', patience=patience)
-        callbacks.append(early_stopping_callback)
-
-        history = network.fit(
+    if early_stopping and validation_data:
+        callback = K.callbacks.EarlyStopping(monitor="val_loss",
+                                             patience=patience)
+        return network.fit(
             data,
             labels,
             batch_size=batch_size,
             epochs=epochs,
             validation_data=validation_data,
+            callbacks=[callback],
             verbose=verbose,
-            shuffle=shuffle,
-            callbacks=callbacks)
-    return history
+            shuffle=shuffle)
+    else:
+        return network.fit(data, labels, batch_size=batch_size,
+                           epochs=epochs, verbose=verbose, shuffle=shuffle)
