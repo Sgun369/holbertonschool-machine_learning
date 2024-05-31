@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """Save Only the Best"""
-from datetime import date
 import tensorflow.keras as K
 
 
