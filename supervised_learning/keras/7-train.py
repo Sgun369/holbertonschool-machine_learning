@@ -19,27 +19,29 @@ def train_model(
         shuffle=False):
     """also train the model with learning rate decay"""
     callbacks = []
-    if early_stopping and validation_data is not None:
-        early_stopping_callback = K.callbacks.EarlyStopping(
-            monitor='val_loss', patience=patience)
-        callbacks.append(early_stopping_callback)
 
-    if learning_rate_decay and validation_data is not None:
-        def schedule(epoch):
+    if early_stopping and validation_data:
+        early_stop_callback = K.callbacks.EarlyStopping(monitor="val_loss",
+                                                        patience=patience)
+        callbacks.append(early_stop_callback)
+
+    if validation_data and learning_rate_decay:
+
+        def scheduler(epoch):
+            """calculates learning rate using inverse time decay"""
             new_lr = alpha / (1 + decay_rate * epoch)
-            print(f"Epoch {epoch + 1}: Learning rate is {new_lr:.6f}")
             return new_lr
 
-        lr_decay_callback = K.callbacks.LearningRateScheduler(
-            schedule, verbose=1)
-        callbacks.append(lr_decay_callback)
+        lr_schedule_callback = K.callbacks.LearningRateScheduler(
+            scheduler, verbose=1)
+        callbacks.append(lr_schedule_callback)
 
-    history = network.fit(
-        data,
-        labels,
-        batch_size=batch_size,
-        epochs=epochs,
-        validation_data=validation_data,
-        verbose=verbose,
-        shuffle=shuffle,
-        callbacks=callbacks)
+        return network.fit(
+            data,
+            labels,
+            batch_size=batch_size,
+            epochs=epochs,
+            validation_data=validation_data,
+            callbacks=callbacks,
+            verbose=verbose,
+            shuffle=shuffle)
