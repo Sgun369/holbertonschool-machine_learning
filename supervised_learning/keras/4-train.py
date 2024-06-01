@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """Train Train"""
-import numpy as np
 import tensorflow.keras as K
 
 
