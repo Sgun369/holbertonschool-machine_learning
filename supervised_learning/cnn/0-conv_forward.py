@@ -1,4 +1,4 @@
-#!/usrr/bin/env python3
+#!/usr/bin/env python3
 """Convolutional Forward Prop"""
 import numpy as np
 
