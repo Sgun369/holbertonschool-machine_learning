@@ -9,23 +9,19 @@ def pool_forward(A_prev, kernel_shape, stride=(1, 1), mode='max'):
     kh, kw = kernel_shape
     sh, sw = stride
 
-    h_new = (h_prev - kh) // sh + 1
-    w_new = (w_prev - kw) // sw + 1
+    out_h = (h_prev - kh) // sh + 1
+    out_w = (w_prev - kw) // sw + 1
 
-    output = np.zeros((m, h_new, c_prev))
+    output = np.zeros((m, out_h, out_w, c_prev))
 
-    for i in range(h_new):
-        for j in range(w_new):
-            for c in range(c_prev):
-                h_start = i * sh
-                h_end = h_start + kh
-                w_start = j * sw
-                w_end = w_start + kw
-
-                if mode == 'max':
-                    output[:, 1, j, c] = np.max(
-                        A_prev[:, h_start:h_end, w_start:w_end, c], axis=(1, 2))
-                elif mode == 'avg':
-                    output[:, i, j, c] = np.mean(
-                        A_prev[:, h_start:h_end, w_start:w_end, c], axis=(1, 2))
+    for h in range(out_h):
+        for w in range(out_w):
+            if mode == 'max':
+                output[:, h, w, :] = np.max(
+                    A_prev[:, h * sh:h * sh + kh, w * sw:w * sw + kw, :],
+                    axis=(1, 2))
+            elif mode == 'avg':
+                output[:, h, w, :] = np.mean(
+                    A_prev[:, h * sh:h * sh + kh, w * sw:w * sw + kw, :],
+                    axis=(1, 2))
     return output
