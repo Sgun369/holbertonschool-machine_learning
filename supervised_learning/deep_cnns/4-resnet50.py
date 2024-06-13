@@ -6,7 +6,7 @@ projection_block = __import__('3-projection_block').projection_block
 
 
 def resnet50():
-    """ builds the ResNet-50 architecture"""
+    """Builds the ResNet-50 architecture"""
     he_normal = K.initializers.HeNormal(seed=0)
     input_shape = (224, 224, 3)
     inputs = K.Input(shape=input_shape)
@@ -16,7 +16,7 @@ def resnet50():
         64, (7, 7), strides=(
             2, 2), padding='same', kernel_initializer=he_normal)(inputs)
     X = K.layers.BatchNormalization(axis=-1)(X)
-    X = K.layers.ReLU()(X)
+    X = K.layers.Activation('relu')(X)
     X = K.layers.MaxPooling2D((3, 3), strides=(2, 2), padding='same')(X)
 
     # Stage 2
@@ -44,7 +44,7 @@ def resnet50():
     X = identity_block(X, [512, 512, 2048])
 
     # Average Pooling
-    X = K.layers.AveragePooling2D((7, 7), padding='same')(X)
+    X = K.layers.AveragePooling2D((7, 7), padding='valid')(X)
 
     # Output layer
     X = K.layers.Flatten()(X)
