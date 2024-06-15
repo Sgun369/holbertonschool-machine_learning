@@ -4,16 +4,24 @@ from tensorflow import keras as K
 
 
 def transition_layer(X, nb_filters, compression):
-    """transition layer 1 × 1 conv followed by 2 × 2 average pool, stride 2"""
-    init = K.initializers.he_normal(seed=None)
-    filters = int(nb_filters * compression)
-    layer = K.layers.BatchNormalization()(X)
-    layer = K.layers.Activation('relu')(layer)
-    layer = K.layers.Conv2D(filters=filters,
-                            kernel_size=1,
-                            padding='same',
-                            kernel_initializer=init)(layer)
-    layer = K.layers.AveragePooling2D(pool_size=2,
-                                      strides=2,
-                                      padding='same')(layer)
-    return layer, filters
+    """Builds a transition layer as described in DenseNet"""
+    he_normal = K.initializers.HeNormal(seed=0)
+
+    # Calculate the number of filters after compression
+    nb_filters = int(nb_filters * compression)
+
+    # Batch Normalization followed by ReLU activation
+    X = K.layers.BatchNormalization(axis=-1)(X)
+    X = K.layers.ReLU()(X)
+
+    # 1x1 Convolution with compression factor
+    X = K.layers.Conv2D(nb_filters, (1, 1), padding='same',
+                        kernel_initializer=he_normal)(X)
+
+    # 2x2 Average Pooling
+    X = K.layers.AveragePooling2D(
+        pool_size=(
+            2, 2), strides=(
+            2, 2), padding='same')(X)
+
+    return X, nb_filters
