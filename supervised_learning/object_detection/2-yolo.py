@@ -73,27 +73,21 @@ class Yolo:
     def filter_boxes(self, boxes, box_confidences, box_class_probs):
         """Filters boxes based on their box scores"""
         filtered_boxes = []
-        box_classes = []
-        box_scores = []
+        filtered_scores = []
+        filtered_classes = []
 
-        for box, box_conf, box_class_prob in zip(
-                boxes, box_confidences, box_class_probs):
-            box_conf = self.sigmoid(box_conf)
-            box_class_prob = self.sigmoid(box_class_prob)
-            box_scores_raw = box_conf * box_class_prob
+        for i in range(len(boxes)):
+            box_scores = box_confidences[i] * box_class_probs[i]
+            box_classes = np.argmax(box_scores, axis=-1)
+            box_class_scores = np.max(box_scores, axis=-1)
+            filtering_mask = box_class_scores >= self.class_t
 
-            box_classes_raw = np.argmax(box_scores_raw, axis=-1)
-            box_scores_raw = np.max(box_scores_raw, axis=-1)
+            filtered_boxes += boxes[i][filtering_mask].tolist()
+            filtered_scores += box_class_scores[filtering_mask].tolist()
+            filtered_classes += box_classes[filtering_mask].tolist()
 
-            # Filter out boxes based on scores
-            filtering_mask = box_scores_raw >= self.class_t
+        filtered_boxes = np.array(filtered_boxes)
+        filtered_scores = np.array(filtered_scores)
+        filtered_classes = np.array(filtered_classes)
 
-            filtered_boxes.append(box[filtering_mask])
-            box_classes.append(box_classes_raw[filtering_mask])
-            box_scores.append(box_scores_raw[filtering_mask])
-
-        filtered_boxes = np.concatenate(filtered_boxes, axis=0)
-        box_classes = np.concatenate(box_classes, axis=0)
-        box_scores = np.concatenate(box_scores, axis=0)
-
-        return filtered_boxes, box_classes, box_scores
+        return filtered_boxes, filtered_classes, filtered_scores
