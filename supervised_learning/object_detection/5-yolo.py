@@ -16,6 +16,9 @@ class Yolo:
         self.nms_t = nms_t
         self.anchors = anchors
 
+        self.input_h = self.model.input_shape[1]
+        self.input_w = self.model.input_shape[2]
+
         with open(classes_path, 'r') as f:
             classes = f.read().strip().split('\n')
         self.class_names = classes
@@ -182,19 +185,25 @@ class Yolo:
 
     def preprocess_images(self, images):
         """Preprocess images by resizing and rescaling."""
-        input_h = self.model.input.shape[1]
-        input_w = self.model.input.shape[2]
-
         pimages = []
         image_shapes = []
 
-        for image in images:
-            image_shapes.append(image.shape[:2])
-            resized_image = cv2.resize(
-                image, (input_w, input_h), interpolation=cv2.INTER_CUBIC)
-            rescaled_image = resized_image / 255.0
-            pimages.append(rescaled_image)
+        for img in images:
+            # Original shape
+            original_shape = img.shape[:2]  # (height, width)
+            image_shapes.append(original_shape)
 
+            # Resize image
+            resized = cv2.resize(
+                img, (self.input_w, self.input_h), interpolation=cv2.INTER_CUBIC)
+
+            # Normalize image to range [0, 1]
+            normalized = resized / 255.0
+
+            pimages.append(normalized)
+
+        # Convert lists to numpy arrays
         pimages = np.array(pimages)
         image_shapes = np.array(image_shapes)
-        return pimages, image_shapes
+
+        return (pimages, image_shapes)
