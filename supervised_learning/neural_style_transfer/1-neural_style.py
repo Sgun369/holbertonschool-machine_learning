@@ -2,8 +2,6 @@
 """Initialize Initialize"""
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.applications import VGG19
-from tensorflow.keras.models import Model
 
 
 class NST:
@@ -55,7 +53,8 @@ class NST:
 
     def load_model(self):
         """creates the model used to calculate cost"""
-        vgg = VGG19(include_top=False, weights='imagenet')
+        vgg = tf.keras.applications.VGG19(
+            include_top=False, weights='imagenet')
         vgg.trainable = False
 
         style_outputs = [
@@ -64,4 +63,4 @@ class NST:
 
         model_outputs = style_outputs + [content_output]
 
-        return Model(vgg.input, model_outputs)
+        return tf.keras.models.Model(vgg.input, model_outputs)
