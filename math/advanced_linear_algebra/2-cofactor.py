@@ -19,6 +19,8 @@ def cofactor(matrix):
     rows = len(matrix)
     if rows == 0 or any(len(row) != rows for row in matrix):
         raise ValueError("matrix must be a non-empty square matrix")
+    if rows == 1:
+        return [[1]]
 
     cofactor_matrix = []
     for i in range(rows):
