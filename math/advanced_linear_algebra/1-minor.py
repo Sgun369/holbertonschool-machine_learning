@@ -6,18 +6,7 @@
 
 def minor(matrix):
     """
-    Calculates the minor matrix of a given square matrix.
-
-    Args:
-        matrix (list of lists): A square matrix represented as a list of lists.
-
-    Returns:
-        list of lists: The minor matrix of the input matrix.
-
-    Raises:
-        TypeError: If matrix is not a list of lists.
-        ValueError: If matrix is not square or is empty.
-    """
+    Calculates the minor matrix of a given square matrix."""
     if not isinstance(
         matrix,
         list) or not all(
