@@ -1,12 +1,6 @@
 #!/usr/bin/env python3
 """
-This module to compute the minor matrix of a given square matrix.
-"""
-
-
-#!/usr/bin/env python3
-"""
-This module contains a function to compute the minor matrix of a given square matrix.
+ module to compute the minor matrix of a given square matrix.
 """
 
 
@@ -24,7 +18,6 @@ def minor(matrix):
         TypeError: If matrix is not a list of lists.
         ValueError: If matrix is not square or is empty.
     """
-    # Validate input type
     if not isinstance(
         matrix,
         list) or not all(
@@ -33,28 +26,23 @@ def minor(matrix):
             list) for row in matrix):
         raise TypeError("matrix must be a list of lists")
 
-    # Validate matrix dimensions
     rows = len(matrix)
     if rows == 0 or any(len(row) != rows for row in matrix):
         raise ValueError("matrix must be a non-empty square matrix")
 
-    # Edge case for 1x1 matrix
     if rows == 1:
         return [[1]]
 
-    # Compute the minor matrix
     def determinant(sub_matrix):
         """Calculates the determinant of a square matrix recursively."""
-        if len(sub_matrix) == 1:  # Base case for 1x1 matrix
+        if len(sub_matrix) == 1:
             return sub_matrix[0][0]
-        if len(sub_matrix) == 2:  # Base case for 2x2 matrix
+        if len(sub_matrix) == 2:
             return sub_matrix[0][0] * sub_matrix[1][1] - \
                 sub_matrix[0][1] * sub_matrix[1][0]
 
-        # General case: expand along the first row
         det = 0
         for col in range(len(sub_matrix)):
-            # Create a smaller matrix excluding the current row and column
             minor = [row[:col] + row[col + 1:] for row in sub_matrix[1:]]
             det += ((-1) ** col) * sub_matrix[0][col] * determinant(minor)
         return det
@@ -63,7 +51,6 @@ def minor(matrix):
     for i in range(rows):
         minor_row = []
         for j in range(rows):
-            # Create a smaller matrix excluding the i-th row and j-th column
             sub_matrix = [row[:j] + row[j + 1:]
                           for idx, row in enumerate(matrix) if idx != i]
             minor_row.append(determinant(sub_matrix))
