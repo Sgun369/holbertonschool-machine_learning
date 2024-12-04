@@ -1,4 +1,4 @@
-#!/user/bin/env python3
+#!/usr/bin/env python3
 """module to calculate the inverse of a matrix"""
 
 adjugate = __import__('3-adjugate').adjugate
