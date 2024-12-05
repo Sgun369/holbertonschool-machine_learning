@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """module poisson"""
-import math
 
 
 class Poisson:
@@ -21,7 +20,13 @@ class Poisson:
 
     def pmf(self, k):
         """calculates the PMF for a given number of successes."""
+        if not isinstance(k, int):
+            k = int(k)
         if k < 0:
             return 0
-        k = int(k)
-        return (math.exp(-self.lambtha) * (self.lambtha ** k)) / math.factorial(k)
+        else:
+            e = 2.7182818285
+            c = 1
+            for i in range(1, k + 1):
+                c = c * i
+            return float((self.lambtha ** k) * (e ** (-self.lambtha)) / c)
