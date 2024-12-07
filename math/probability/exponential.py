@@ -26,8 +26,7 @@ class Exponential:
         else:
             e = 2.7182818285
             return self.lambtha * e ** (-self.lambtha * x)
-    
-    
+
     def cdf(self, x):
         """Calculates theXDF for agiven time periode x"""
         if x < 0:
