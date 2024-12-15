@@ -8,31 +8,22 @@ def maximization(X, g):
     in the EM algorithm
     """
     try:
-        if not isinstance(X, np.ndarray) or not isinstance(g, np.ndarray):
-            return None, None
-        if len(X.shape) != 2 or len(g.shape) != 2:
-            return None, None
+        if not isinstance(X, np.ndarray) or X.ndim != 2:
+            return None, None, None
+
+        if not isinstance(
+                g,
+                np.ndarray) or g.ndim != 2 or g.shape[1] != X.shape[0]:
+            return None, None, None
         n, d = X.shape
-        k, n_check = g.shape
-        if n != n_check:
-            return None, None, None
-
-        if not np.allclose(np.sum(g, axis=0), 1):
-            return None, None, None
-
-        N_k = np.sum(g, axis=1)
-        pi = N_k / n
-
-        m = np.dot(g, X) / N_k[:, np.newaxis]
+        k, n = g.shape
+        pi = np.sum(g, axis=1) / n
+        m = np.dot(g, X) / np.sum(g, axis=1)[:, None]
         S = np.zeros((k, d, d))
-
-        X_expanded = X[np.newaxis, :, :]
-        m_expanded = m[:, np.newaxis, :]
-
-        diff = X_expanded - m_expanded
-
-        S = np.einsum('kn, knd, knd -> kdd', g, diff, diff) / \
-            N_k[:, np.newaxis, np.newaxis]
+        for i in range(k):
+            diff_X_m = X - m[i]
+            S[i] = np.dot(g[i] * diff_X_m.T, diff_X_m) / np.sum(g[i])
         return pi, m, S
-    except Exception as e:
+
+    except Exception:
         return None, None, None
