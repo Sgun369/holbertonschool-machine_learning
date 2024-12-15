@@ -4,7 +4,8 @@ import numpy as np
 
 
 def pdf(X, m, S):
-    """ calculates the probability density function of a Gaussian distribution"""
+    """ calculates the probability density function
+    of a Gaussian distribution"""
     if not isinstance(X, np.ndarray) or X.ndim != 2:
         return None
     n, d = X.shape
