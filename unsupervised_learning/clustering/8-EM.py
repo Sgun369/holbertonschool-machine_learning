@@ -1,4 +1,4 @@
-#!/usr/bin/env pyhton3
+#!/usr/bin/env python3
 """module expectation maximization"""
 import numpy as np
 initialize = __import__('4-initialize').initialize
