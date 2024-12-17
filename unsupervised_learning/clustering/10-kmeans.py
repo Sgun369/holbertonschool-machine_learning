@@ -1,4 +1,4 @@
-#!/usr/bin:env python3
+#!/usr/bin/env python3
 """module hello sklearn"""
 import numpy as np
 import sklearn.cluster
