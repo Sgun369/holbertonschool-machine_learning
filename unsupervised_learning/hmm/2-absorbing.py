@@ -6,11 +6,12 @@ import numpy as np
 
 def absorbing(P):
     """Determines if a markov chain is absorbing"""
-    if not isinstance(P, np.ndarray) or P.ndim != 2:
+    if not isinstance(
+            P,
+            np.ndarray) or P.ndim != 2 or P.shape[0] != P.shape[1]:
         return False
-    n, m = P.shape
-    if n != m:
-        return False
+
+    n = P.shape[0]
 
     absorbing_states = np.diag(P) == 1
 
@@ -20,20 +21,19 @@ def absorbing(P):
     if np.all(absorbing_states):
         return True
 
-    transient_states = ~absorbing_states
+    transient_indices = np.where(~absorbing_states)[0]
+    absorbing_indices = np.where(absorbing_states)[0]
 
-    indices = np.argsort(absorbing_states)[::-1]
-    P_canonical = P[indices][:, indices]
+    # Transitions among transient states
+    Q = P[np.ix_(transient_indices, transient_indices)]
+    # Transitions from transient to absorbing states
+    R = P[np.ix_(transient_indices, absorbing_indices)]
 
-    num_absorbing = np.sum(absorbing_states)
-    R = P_canonical[num_absorbing:, :num_absorbing]
-    Q = P_canonical[num_absorbing:, num_absorbing:]
-
-    identity = np.eye(Q.shape[0])
     try:
-        fundamental_matrix = np.linalg.inv(identity - Q)
+        fundamental_matrix = np.linalg.inv(np.eye(Q.shape[0]) - Q)
     except np.linalg.LinAlgError:
         return False
 
-    reachability_matrix = np.matmul(fundamental_matrix, R)
-    return np.all(reachability_matrix > 0)
+    reachability = np.matmul(fundamental_matrix, R)
+
+    return np.all(np.sum(reachability, axis=1) > 0)
