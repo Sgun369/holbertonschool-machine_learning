@@ -5,7 +5,7 @@ import numpy as np
 
 
 def absorbing(P):
-    """Determines if a markov chain is absorbing"""
+    """Determines if a markov chain is absorbing."""
     if not isinstance(
             P,
             np.ndarray) or P.ndim != 2 or P.shape[0] != P.shape[1]:
